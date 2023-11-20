@@ -49,7 +49,7 @@ else
  end
 end
 
-def preorder(node = @root,array = [])
+def preorder(node = self.root,array = [])
   return if node.nil?
   if block_given?
   yield node 
@@ -61,7 +61,7 @@ def preorder(node = @root,array = [])
    array if !block_given?
 end
 
-def inorder(node = @root ,array = [])
+def inorder(node = self.root ,array = [])
   return if node.nil?
 
   inorder(node.left,array)
@@ -74,7 +74,7 @@ def inorder(node = @root ,array = [])
   array if !block_given?
 end
 
-def postorder(node = @root, array = [])
+def postorder(node = self.root, array = [])
   return if node.nil?
 
   postorder(node.left,array)
@@ -85,6 +85,46 @@ def postorder(node = @root, array = [])
     array << node
   end
   array if !block_given?
+end
+
+def height(node)
+  max_height = []
+  current = @root
+  while current.data != node
+    current.data > node ? current = current.left : current = current.right
+  end
+  found_node = current
+
+  current_left_subtree = found_node.left
+  current_right_subtree = found_node.right
+  count_left = 0
+  count_right = 0
+
+  while current_left_subtree
+    current_left_subtree.left.nil? ? current_left_subtree = current_left_subtree.right : current_left_subtree = current_left_subtree.left
+    count_left+=1
+  end
+  max_height << count_left
+  while current_right_subtree
+    current_right_subtree.left.nil? ? current_right_subtree = current_right_subtree.right : current_right_subtree = current_right_subtree.left
+    count_right+=1
+  end
+  max_height << count_right
+  max_height.max
+end
+
+def height_recursive(node)
+  
+end
+
+def depth(node)
+  current = @root
+  count = 0
+  while current.data != node
+    count+=1
+    current.data > node ? current = current.left : current = current.right
+  end
+  count
 end
 
 def insert(val=0)
@@ -110,13 +150,6 @@ def insert(val=0)
   end
 end
 
-# CHECK for the root if it has node in itself ?
-# IF true add node in the root of the tree and RETURN
-
-# check IF the insert value greater or lesser than root ?
-# if bigger || lesser, check if the root.left or root.right != nil
-# if data.left or data.right == nil then append new node and return
-# else traverse deeply and follow same steps again
 
 def delete(val)
   current = @root
@@ -161,19 +194,6 @@ def delete(val)
     end
     
 end
-end
-#  check if the current.data == val if false then follow next steps 1; else follow steps 2
-#  1. then compare data and val, traverse deeply due to result and check again
-#  2. check left and right child. if there is no child then follow step 2.1
-#  2.1 set reference of previous node to current node
-#  2.3 
-
-def traverse
-  current = @root
-  2.times do
-  print current
-    current = current.left
-  end
 end
 
 

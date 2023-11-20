@@ -49,6 +49,44 @@ else
  end
 end
 
+def preorder(node = @root,array = [])
+  return if node.nil?
+  if block_given?
+  yield node 
+  else
+    array << node
+  end
+  preorder(node.left,array)
+  preorder(node.right,array)
+   array if !block_given?
+end
+
+def inorder(node = @root ,array = [])
+  return if node.nil?
+
+  inorder(node.left,array)
+  if block_given?
+    yield node
+  else
+    array << node
+  end
+  inorder(node.right,array)
+  array if !block_given?
+end
+
+def postorder(node = @root, array = [])
+  return if node.nil?
+
+  postorder(node.left,array)
+  postorder(node.right,array)
+  if block_given?
+    yield node
+  else
+    array << node
+  end
+  array if !block_given?
+end
+
 def insert(val=0)
   current_root = self.root
   node = Node.new(val)

@@ -34,6 +34,18 @@ def find(val)
   nil
 end
 
+def level_order_recursive(node = @root,print_out = [])
+  return if node.nil?
+  print_out << node
+  level_order_recursive(node.left,print_out) 
+  level_order_recursive(node.right,print_out)
+  if block_given?
+    print_out.each{|node| yield node}
+  else
+   print_out
+   end
+end
+
 def level_order
   queue = [@root] 
   print_out = []
@@ -158,11 +170,15 @@ def delete(val)
   inorder = nil
 
   while current
+    # states that node is found
     if current.data == val
+      #  if has one children
       if !current.left && !current.right
         direction == false ? previous.left = nil : previous.right = nil
+        # if has two children 
       elsif (!current.left && current.right) || (current.left && !current.right)
         direction == false ? previous.left = current.left : previous.right = current.right
+        # if has three children
       elsif current.left && current.right
 
         previous_of_current = current
@@ -182,6 +198,7 @@ def delete(val)
     end
       return
     else
+      # traverses deeply if current node != val
       if current.data > val
         previous = current
         current.left.nil? ? current = current.right : current = current.left
@@ -191,13 +208,57 @@ def delete(val)
         current = current.right.nil? ? current = current.left : current = current.right
         direction = true
       end
+    end   
+end
+end
+
+def rebalance
+  nodes_array = self.level_order
+  self.build_tree(nodes_array,0,nodes_array.length-1)
+end
+
+
+def balanced
+  nodes_array = self.level_order
+  return true if nodes_array.length <= 1
+  nodes_array.each do |node|
+    node_left = node.left
+    node_right = node.right
+    count_left = 0
+    count_right = 0
+
+    while node_left
+      node_left.left.nil? ? node_left = node_left.right : node_left = node_left.left
+    count_left+=1
     end
-    
-end
+    while node_right
+      node_right.left.nil? ? node_right = node_right.right : node_right = node_right.left
+      count_right+=1
+    end
+    return false if (count_left - count_right > 1) || (count_right - count_left > 1)
+  end
+  true
 end
 
-
 end
+
 tree = Tree.new()
 n = tree.arr.length
 tree.build_tree(tree.arr,0,n-1)
+# tree.level_order
+# tree.preorder
+# tree.postorder
+# tree.inorder
+# tree.insert(100)
+# tree.insert(104)
+# tree.insert(107)
+# tree.insert(109)
+# tree.insert(110)
+# tree.insert(115)
+# tree.balanced
+# tree.rebalance
+# tree.balanced
+# tree.level_order
+# tree.postorder
+# tree.preorder
+# tree.inorder
